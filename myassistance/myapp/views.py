@@ -3,6 +3,14 @@ from .models import myai
 from django.contrib import messages
 import datetime
 import re
+from django.utils import timezone
+
+
+
+
+
+
+
 
 # Create your views here.
 
@@ -279,8 +287,8 @@ def chat_view(request):
         elif "what is the date today" in message or "today's date" in message or "date" in message or "today date" in message or "today date?" in message:
             reply = "Today's date is " + str(datetime.date.today()) + " 📅"
 
-        elif any(kw in message.lower() for kw in ["what is the time now", "current time", "time"]):
-            now = datetime.datetime.now().strftime("%I:%M %p")
+        elif "what is the time now" in message or "current time" in message or "time" in message:
+            now = timezone.localtime().strftime("%I:%M %p")
             reply = "The current time is " + now + " ⏰"
 
         elif "what is your power" in message or "your powers" in message or "what can you do" in message or "what power you have" in message or "what is your capacity" in message:
@@ -303,7 +311,7 @@ def chat_view(request):
             reply = "Not yet, but I can learn Tamil too if my developer trains me 🎓"
         elif "can you speak hindi" in message or "do you know hindi" in message:
             reply = "Not yet, but if my developer teaches me, I will learn Hindi too 🇮🇳"
-        elif "do you know how many months are included in an year" in message or "how many month in a year" in message or "months i year" in message:
+        elif "do you know how many months are included in an year" in message or "How many months are in a year?" in message or "months in a year" in message:
             reply = "yes, 12 months are in a year"
         elif "why are you created" in message or "why created you" in message:
             reply = "I was created by Vaszeem to assist you with anything you need. 😊"
@@ -313,7 +321,17 @@ def chat_view(request):
 
 
 
-            
+
+
+
+
+
+
+
+        # elif "what is the date today" in message or "current date" in message or "date" in message:
+        #     today = timezone.localtime().strftime("%B %d, %Y")  # Example: July 08, 2025
+        #     reply = "Today's date is " + today + " 📅"
+
         else:
             reply = "Sorry, I didn't understand that. Can you rephrase or try asking differently? 🤔"
 
