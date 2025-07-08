@@ -25,7 +25,21 @@ SECRET_KEY = 'django-insecure-w2mz0+vu^ft+_!4&0pupy8gjo-!xep&*pydo*$o8#=ga=-t!@3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+
+import os
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
+# Optional for Heroku/Render
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+import os
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 
 # Application definition
