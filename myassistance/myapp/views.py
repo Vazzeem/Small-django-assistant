@@ -5,7 +5,9 @@ import datetime
 import re
 from django.utils import timezone
 
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
 
 
 
@@ -40,13 +42,6 @@ def ui(request):
         m=request.session['my']
         return render(request,'ui.html',{'p':m})
     return render(request,'ui.html')
-
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
-
-
-
 
 
 
@@ -324,13 +319,7 @@ def chat_view(request):
 
 
 
-
-
-
-
-        # elif "what is the date today" in message or "current date" in message or "date" in message:
-        #     today = timezone.localtime().strftime("%B %d, %Y")  # Example: July 08, 2025
-        #     reply = "Today's date is " + today + " 📅"
+      
 
         else:
             reply = "Sorry, I didn't understand that. Can you rephrase or try asking differently? 🤔"
@@ -338,6 +327,9 @@ def chat_view(request):
         return JsonResponse({'reply': reply})
 
 
+  # elif "what is the date today" in message or "current date" in message or "date" in message:
+        #     today = timezone.localtime().strftime("%B %d, %Y")  # Example: July 08, 2025
+        #     reply = "Today's date is " + today + " 📅"
 
 
 
