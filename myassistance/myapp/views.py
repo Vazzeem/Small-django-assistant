@@ -9,35 +9,38 @@ from openai import OpenAI
 import json
 import datetime
 
-# ✅ Initialize OpenRouter-compatible client with proper headers
+# ✅ Initialize OpenRouter-compatible client with safe fallback
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=settings.OPENROUTER_API_KEY,
+    api_key=settings.OPENROUTER_API_KEY or "sk-or-v1-your-key",  # fallback only for local dev
     default_headers={
-        "HTTP-Referer": "https://small-django-assistant.onrender.com",  # Replace with your Render URL
-        "X-Title": "Vazeem Assistant",  # Optional custom name
+        "HTTP-Referer": "https://small-django-assistant.onrender.com",  # Your live site URL
+        "X-Title": "Vazeem Assistant",
     }
 )
 
 # ---------------------- Register ----------------------
 def r(request):
     if request.method == 'POST':
-        adminn = request.POST['name']
-        passw = request.POST['password']
-        myai.objects.create(admin=adminn, password=passw)
+        adminn = request.POST.get('name')
+        passw = request.POST.get('password')
+        if adminn and passw:
+            myai.objects.create(admin=adminn, password=passw)
+            messages.success(request, "Registered successfully!")
+            return redirect('login')
     return render(request, 'r.html')
 
 # ---------------------- Login ----------------------
 def login(request):
     if request.method == 'POST':
-        adminn = request.POST['name']
-        passw = request.POST['password']
-        myadmin = myai.objects.filter(admin=adminn, password=passw)
+        adminn = request.POST.get('name')
+        passw = request.POST.get('password')
+        myadmin = myai.objects.filter(admin=adminn, password=passw).first()
         if myadmin:
             request.session['my'] = adminn
             return redirect('ui')
         else:
-            messages.info(request, "Login failed")
+            messages.error(request, "Login failed")
     return render(request, 'login.html')
 
 # ---------------------- UI ----------------------
@@ -45,18 +48,16 @@ def ui(request):
     if 'my' in request.session:
         m = request.session['my']
         return render(request, 'ui.html', {'p': m})
-    return render(request, 'ui.html')
+    return redirect('login')
 
 # ---------------------- Ask AI from OpenRouter ----------------------
 def ask_openrouter_ai(message):
     try:
         completion = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",  # ✅ free model
-            messages=[
-                {"role": "user", "content": message}
-            ]
+            model="mistralai/mistral-7b-instruct",
+            messages=[{"role": "user", "content": message}]
         )
-        return completion.choices[0].message.content
+        return completion.choices[0].message.content.strip()
     except Exception as e:
         print("❌ AI Error:", str(e))
         return "Sorry, I couldn't process your request right now."
@@ -65,25 +66,34 @@ def ask_openrouter_ai(message):
 @csrf_exempt
 def chatbot_view(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        user_message = data.get('message', '').lower()
+        try:
+            data = json.loads(request.body)
+            user_message = data.get('message', '').lower().strip()
 
-        # ✅ Rule-based replies
-        if "who is your creator" in user_message or "who created you" in user_message:
-            bot_reply = "I was created by my sir and developer Vazeem 👨‍💻"
-        elif "what is your name" in user_message:
-            bot_reply = "My name is AI Assistander 🤖"
-        elif "how old are you" in user_message:
-            bot_reply = "I was born on July 6, 2025 😄"
-        elif "do you know malayalam" in user_message:
-            bot_reply = "Yes, I can understand simple Malayalam 😊"
-        elif "what is the date" in user_message:
-            bot_reply = f"Today's date is {datetime.date.today()} 📅"
-        elif "what is the time" in user_message:
-            now = timezone.localtime().strftime("%I:%M %p")
-            bot_reply = f"The current time is {now} ⏰"
-        else:
-            # ✅ AI fallback
-            bot_reply = ask_openrouter_ai(user_message)
+            if not user_message:
+                return JsonResponse({'reply': "Please send a valid message."})
 
-        return JsonResponse({'reply': bot_reply})
+            # ✅ Rule-based replies
+            if "who is your creator" in user_message or "who created you" in user_message:
+                bot_reply = "I was created by my sir and developer Vazeem 👨‍💻"
+            elif "what is your name" in user_message:
+                bot_reply = "My name is AI Assistander 🤖"
+            elif "how old are you" in user_message:
+                bot_reply = "I was born on July 6, 2025 😄"
+            elif "do you know malayalam" in user_message:
+                bot_reply = "Yes, I can understand simple Malayalam 😊"
+            elif "what is the date" in user_message:
+                bot_reply = f"Today's date is {datetime.date.today()} 📅"
+            elif "what is the time" in user_message:
+                now = timezone.localtime().strftime("%I:%M %p")
+                bot_reply = f"The current time is {now} ⏰"
+            else:
+                # ✅ AI fallback
+                bot_reply = ask_openrouter_ai(user_message)
+
+            return JsonResponse({'reply': bot_reply})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'reply': "Invalid JSON format."}, status=400)
+
+    return JsonResponse({'reply': "Method not allowed."}, status=405)

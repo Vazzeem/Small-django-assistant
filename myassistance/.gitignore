@@ -1,27 +1,40 @@
 # Python
-*.pyc
 __pycache__/
-
-# Virtualenv
-venv/
-env/
-ENV/
-*.env
-
-# Django stuff
-db.sqlite3
-*.log
-*.pot
 *.py[cod]
-media/
-staticfiles/
-local_settings.py
+*.pyo
+*.pyd
+*.sqlite3
+*.log
 
-# VS Code / PyCharm
-.vscode/
+# Virtual Environment
+env/
+venv/
+myenv/
+ENV/
+.venv/
 .idea/
 
-# OS files
+# Django
+*.db
+*.sqlite3
+/staticfiles/
+/media/
+
+# VS Code
+.vscode/
+
+# macOS
 .DS_Store
-Thumbs.db
+
+# PyCharm
+*.iml
+.idea/
+
+# Environment Variables
+.env
+*.env
+
+# Render specific (optional safety)
+build/
+
 
