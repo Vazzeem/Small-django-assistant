@@ -1,13 +1,15 @@
 from pathlib import Path
 from decouple import config  # ✅ Make sure python-decouple is installed
 
+
+
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ✅ Load from .env securely
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='fallback-secret-key')
-OPENAI_API_KEY = config('OPENAI_API_KEY', default=None)
+OPENAI_API_KEY = config('OPENAI_API_KEY')
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']

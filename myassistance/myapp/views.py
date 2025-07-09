@@ -10,6 +10,8 @@ import json
 import datetime
 
 # ✅ Correct: use OPENAI API key from Django settings
+print(" OPENAI KEY:", settings.OPENAI_API_KEY)
+
 openai.api_key = settings.OPENAI_API_KEY
 
 # ---------------------- Register ----------------------
