@@ -5,13 +5,15 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.conf import settings
-import openai
+from openai import OpenAI  # ✅ NEW import
 import json
 import datetime
 
-# ✅ Use OpenRouter free key & endpoint
-openai.api_key = settings.OPENROUTER_API_KEY
-openai.api_base = "https://openrouter.ai/api/v1"  # 🔁 This is important
+# ✅ Initialize OpenRouter-compatible client
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=settings.OPENROUTER_API_KEY,
+)
 
 # ---------------------- Register ----------------------
 def r(request):
@@ -44,15 +46,19 @@ def ui(request):
 # ---------------------- AI Reply from OpenRouter ----------------------
 def ask_openrouter_ai(message):
     try:
-        response = openai.ChatCompletion.create(
-            model="meta-llama/llama-3-8b-instruct",  # ✅ Free and smart
+        completion = client.chat.completions.create(
+            model="mistralai/mistral-7b-instruct",  # ✅ Free & stable
             messages=[
                 {"role": "user", "content": message}
-            ]
+            ],
+            extra_headers={
+                "HTTP-Referer": "https://your-site-url.com",  # optional
+                "X-Title": "Vazeem Assistant",                # optional
+            }
         )
-        return response.choices[0].message["content"]
+        return completion.choices[0].message.content
     except Exception as e:
-        print("AI Error:", str(e))
+        print("❌ AI Error:", str(e))
         return "Sorry, I couldn't process your request right now."
 
 # ---------------------- Chatbot View (AI + Rule-Based) ----------------------
