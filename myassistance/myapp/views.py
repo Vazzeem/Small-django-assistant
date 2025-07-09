@@ -5,14 +5,18 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.conf import settings
-from openai import OpenAI  # ✅ NEW import
+from openai import OpenAI
 import json
 import datetime
 
-# ✅ Initialize OpenRouter-compatible client
+# ✅ Initialize OpenRouter-compatible client with proper headers
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=settings.OPENROUTER_API_KEY,
+    default_headers={
+        "HTTP-Referer": "https://small-django-assistant.onrender.com",  # Replace with your Render URL
+        "X-Title": "Vazeem Assistant",  # Optional custom name
+    }
 )
 
 # ---------------------- Register ----------------------
@@ -43,32 +47,28 @@ def ui(request):
         return render(request, 'ui.html', {'p': m})
     return render(request, 'ui.html')
 
-# ---------------------- AI Reply from OpenRouter ----------------------
+# ---------------------- Ask AI from OpenRouter ----------------------
 def ask_openrouter_ai(message):
     try:
         completion = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",  # ✅ Free & stable
+            model="mistralai/mistral-7b-instruct",  # ✅ free model
             messages=[
                 {"role": "user", "content": message}
-            ],
-            extra_headers={
-                "HTTP-Referer": "https://your-site-url.com",  # optional
-                "X-Title": "Vazeem Assistant",                # optional
-            }
+            ]
         )
         return completion.choices[0].message.content
     except Exception as e:
         print("❌ AI Error:", str(e))
         return "Sorry, I couldn't process your request right now."
 
-# ---------------------- Chatbot View (AI + Rule-Based) ----------------------
+# ---------------------- Chatbot View (Rule + AI) ----------------------
 @csrf_exempt
 def chatbot_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         user_message = data.get('message', '').lower()
 
-        # ✅ Rule-based responses
+        # ✅ Rule-based replies
         if "who is your creator" in user_message or "who created you" in user_message:
             bot_reply = "I was created by my sir and developer Vazeem 👨‍💻"
         elif "what is your name" in user_message:
@@ -83,7 +83,7 @@ def chatbot_view(request):
             now = timezone.localtime().strftime("%I:%M %p")
             bot_reply = f"The current time is {now} ⏰"
         else:
-            # ✅ Fallback to OpenRouter AI
+            # ✅ AI fallback
             bot_reply = ask_openrouter_ai(user_message)
 
         return JsonResponse({'reply': bot_reply})

@@ -12,8 +12,7 @@ httpx==0.28.1
 idna==3.10
 jiter==0.10.0
 mysql-connector-python==9.1.0
-mysqlclient==2.2.5
-openai==1.93.2
+mysqlclient==2.2.
 packaging==25.0
 pydantic==2.11.7
 pydantic_core==2.33.2
@@ -23,5 +22,6 @@ tqdm==4.67.1
 typing-inspection==0.4.1
 typing_extensions==4.14.1
 tzdata==2025.2
-python-decouple==3.8
+openai==1.93.2
+
 
