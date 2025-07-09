@@ -5,11 +5,14 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ✅ Load from .env securely
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', "django-insecure-w2mz0+vu^ft+_!4&0pupy8gjo-!xep&*pydo*$o8#=ga=-t!@3")
-
 import os
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "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")
+# Django secret key
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+
+# OpenRouter API Key
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+
 
 
 
