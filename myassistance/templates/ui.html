@@ -152,6 +152,8 @@
   </div>
 </div>
 
+
+
 <script>
   async function sendMessage() {
     const input = document.getElementById("userInput");
@@ -161,14 +163,36 @@
     appendMessage(message, 'user');
     input.value = "";
 
-    const response = await fetch("/chat/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: message })
-    });
+    // Disable the Send button
+    const sendBtn = document.querySelector('.chat-input button');
+    sendBtn.disabled = true;
 
-    const data = await response.json();
-    appendMessage(data.reply, 'bot');
+    // Show temporary "Typing..." message
+    appendMessage("Typing...", 'bot');
+
+    try {
+      const response = await fetch("/chat/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: message })
+      });
+
+      const data = await response.json();
+
+      // Remove "Typing..." message
+      const chatBody = document.getElementById("chatBody");
+      const tempTyping = chatBody.querySelector(".bot-msg:last-child");
+      if (tempTyping && tempTyping.textContent === "Typing...") {
+        chatBody.removeChild(tempTyping);
+      }
+
+      appendMessage(data.reply, 'bot');
+
+    } catch (error) {
+      appendMessage("Sorry, something went wrong. Please try again.", 'bot');
+    } finally {
+      sendBtn.disabled = false;
+    }
   }
 
   function appendMessage(text, type) {
@@ -184,8 +208,10 @@
     document.getElementById("chatBody").innerHTML = "";
   }
 
+  // Focus input on page load
   window.onload = () => document.getElementById("userInput").focus();
 </script>
+
 
 </body>
 </html>

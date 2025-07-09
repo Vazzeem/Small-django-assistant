@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myapp import views
-from myapp.views import chat_view
+from myapp.views import chatbot_view
 # from django.views.decorators.csrf import csrf_exempt
 
 
@@ -27,5 +27,10 @@ urlpatterns = [
     path('ui',views.ui,name='ui'),
     path('r',views.r,name='r'),
 
-    path('chat/', chat_view, name='chat-api')
+    # path('chat/', chat_view, name='chat-api'),
+
+    # path('chat/', views.chatbot_view, name='chatbot')
+    path('chat/', chatbot_view, name='chatbot')
 ]
+
+
