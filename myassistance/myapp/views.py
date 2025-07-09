@@ -9,10 +9,9 @@ import openai
 import json
 import datetime
 
-# ✅ Correct: use OPENAI API key from Django settings
-print(" OPENAI KEY:", settings.OPENAI_API_KEY)
-
-openai.api_key = settings.OPENAI_API_KEY
+# ✅ Use OpenRouter free key & endpoint
+openai.api_key = settings.OPENROUTER_API_KEY
+openai.api_base = "https://openrouter.ai/api/v1"  # 🔁 This is important
 
 # ---------------------- Register ----------------------
 def r(request):
@@ -42,15 +41,18 @@ def ui(request):
         return render(request, 'ui.html', {'p': m})
     return render(request, 'ui.html')
 
-# ---------------------- OpenAI Reply ----------------------
-def ask_openai(message):
+# ---------------------- AI Reply from OpenRouter ----------------------
+def ask_openrouter_ai(message):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": message}]
+            model="meta-llama/llama-3-8b-instruct",  # ✅ Free and smart
+            messages=[
+                {"role": "user", "content": message}
+            ]
         )
         return response.choices[0].message["content"]
     except Exception as e:
+        print("AI Error:", str(e))
         return "Sorry, I couldn't process your request right now."
 
 # ---------------------- Chatbot View (AI + Rule-Based) ----------------------
@@ -60,7 +62,7 @@ def chatbot_view(request):
         data = json.loads(request.body)
         user_message = data.get('message', '').lower()
 
-        # ✅ Rule-based responses first
+        # ✅ Rule-based responses
         if "who is your creator" in user_message or "who created you" in user_message:
             bot_reply = "I was created by my sir and developer Vazeem 👨‍💻"
         elif "what is your name" in user_message:
@@ -75,7 +77,7 @@ def chatbot_view(request):
             now = timezone.localtime().strftime("%I:%M %p")
             bot_reply = f"The current time is {now} ⏰"
         else:
-            # ✅ Fallback to OpenAI
-            bot_reply = ask_openai(user_message)
+            # ✅ Fallback to OpenRouter AI
+            bot_reply = ask_openrouter_ai(user_message)
 
         return JsonResponse({'reply': bot_reply})

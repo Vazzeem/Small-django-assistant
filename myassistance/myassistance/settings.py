@@ -1,15 +1,19 @@
 from pathlib import Path
-from decouple import config  # ✅ Make sure python-decouple is installed
-
-
 
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ✅ Load from .env securely
-SECRET_KEY = config('DJANGO_SECRET_KEY', default='fallback-secret-key')
-OPENAI_API_KEY = config('OPENAI_API_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY',"django-insecure-w2mz0+vu^ft+_!4&0pupy8gjo-!xep&*pydo*$o8#=ga=-t!@3")
+
+import os
+
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "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")
+
+
+
+
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']

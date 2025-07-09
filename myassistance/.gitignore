@@ -1,18 +1,27 @@
-# Ignore Python & Django junk
+# Python
+*.pyc
 __pycache__/
-*.py[cod]
+
+# Virtualenv
+venv/
+env/
+ENV/
+*.env
+
+# Django stuff
 db.sqlite3
-*.sqlite3
 *.log
 *.pot
-*.pyc
-*.pyo
-*.pyd
-*.so
+*.py[cod]
+media/
+staticfiles/
+local_settings.py
 
-# Django secret files
-.env
-
-# VSCode or IDE
+# VS Code / PyCharm
 .vscode/
 .idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
