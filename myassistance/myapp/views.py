@@ -75,18 +75,26 @@ def chatbot_view(request):
 
             # ✅ Rule-based replies
             if "who is your creator" in user_message or "who created you" in user_message:
-                bot_reply = "I was created by my sir and developer Vazeem 👨‍💻"
+                bot_reply = "I was created by my sir and developer Vazeem K👨‍💻"
             elif "what is your name" in user_message:
                 bot_reply = "My name is AI Assistander 🤖"
-            elif "how old are you" in user_message:
+            elif "how old are you" in user_message or "your age?" in user_message or "age" in user_message:
                 bot_reply = "I was born on July 6, 2025 😄"
             elif "do you know malayalam" in user_message:
                 bot_reply = "Yes, I can understand simple Malayalam 😊"
             elif "what is the date" in user_message:
                 bot_reply = f"Today's date is {datetime.date.today()} 📅"
-            elif "what is the time" in user_message:
+            elif "what is the time" in user_message or "time now" in user_message or "time" in user_message or "time?" in user_message or "what is the time now?" in user_message or "what is the time now" in user_message:
                 now = timezone.localtime().strftime("%I:%M %p")
                 bot_reply = f"The current time is {now} ⏰"
+            elif any(x in user_message for x in ["what is the date", "date now", "today's date", "current date","date","date?"]):
+                bot_reply = f"Today's date is {datetime.date.today()} 📅"
+            elif any(x in user_message for x in ["what do you know about your creator", "what you know about your creator", "tell me about your creator"]):
+                bot_reply = "I was created by my intelligent developer Vazeem 👨‍💻. He trained me to be helpful and friendly!"
+
+            elif "do you have brain" in user_message or "do you have a brain" in user_message or "you have a brain" in user_message or "you have brain" in user_message:
+                bot_reply = "yes, I am an artificial intelligence and don't have physical organs or biological functions like a human. I am a program running on capable of processing information and generating responses based on that information, but I do not have consciousness, emotions, or biological needs like a human does. but I run on powerful AI models 🧠"
+
             else:
                 # ✅ AI fallback
                 bot_reply = ask_openrouter_ai(user_message)
