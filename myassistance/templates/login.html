@@ -45,7 +45,7 @@
 <body>
 
 <div class="login-card">
-  <h3 id="h31" class="text-center mb-4">If you are admin Please Log in Sir</h3>
+  <h3 id="h31" class="text-center mb-4">Please Log in</h3>
 
   {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
@@ -53,10 +53,14 @@
 
 
  {% if messages %}
-{% for i in messages %}
-<h3 style="color: rgb(206, 7, 7);">{{i}}</h3>
- {% endfor %}
-{% endif %}
+      {% for i in messages %}
+      {% if i.tags == 'success' %}
+      <h4 style="color: greenyellow;">{{i}}</h4>
+      {% else %}
+      <h4 style="color: rgb(205, 6, 19);">{{i}}</h4>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
 
 
 
@@ -64,16 +68,20 @@
   <form method="post">
     {% csrf_token %}
     <div class="mb-3">
-      <label for="username" class="form-label">ADMIN</label>
-      <input type="text" name="name" id="username" class="form-control" required>
+      <label for="username" class="form-label">Email</label>
+      <input type="text" name="email" id="username" class="form-control" required>
     </div>
 
     <div class="mb-4">
       <label for="password" class="form-label">Password</label>
-      <input type="password" name="password" id="password" class="form-control" required>
+      <input type="password" name="p" id="password" class="form-control" required>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">Login</button>
+    <button type="submit" class="btn btn-primary w-100">Login</button> <br><br>
+
+    New user ?
+   <a href="r">Create an acount here! </a>
+    
   </form>
 
 

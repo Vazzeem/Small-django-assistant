@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import myai
+from .models import aimodel
 from django.contrib import messages
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -22,22 +22,31 @@ client = OpenAI(
 # ---------------------- Register ----------------------
 def r(request):
     if request.method == 'POST':
-        adminn = request.POST.get('name')
-        passw = request.POST.get('password')
-        if adminn and passw:
-            myai.objects.create(admin=adminn, password=passw)
-            messages.success(request, "Registered successfully!")
+        name = request.POST.get('username')
+        email = request.POST.get('email')
+        passw = request.POST.get('p')
+        cpassw = request.POST.get('cp')
+        x = aimodel.objects.filter(email=email)
+        if x:
+            messages.info(request,"Email already exists pls create another one")
+        elif passw != cpassw:
+            messages.info(request, "password does not match")
+        else:
+            aimodel.objects.create(Username=name, password=passw, email=email)
+            messages.success(request, "Success")
             return redirect('login')
     return render(request, 'r.html')
 
 # ---------------------- Login ----------------------
 def login(request):
     if request.method == 'POST':
-        adminn = request.POST.get('name')
-        passw = request.POST.get('password')
-        myadmin = myai.objects.filter(admin=adminn, password=passw).first()
-        if myadmin:
-            request.session['my'] = adminn
+        name = request.POST.get('username')
+        email = request.POST.get('email')
+        passw = request.POST.get('p')
+        user = aimodel.objects.filter(email=email, password=passw).first()
+        if user:
+            request.session['mye'] = user.email 
+            request.session['myu'] = user.Username
             return redirect('ui')
         else:
             messages.error(request, "Login failed")
@@ -45,9 +54,12 @@ def login(request):
 
 # ---------------------- UI ----------------------
 def ui(request):
-    if 'my' in request.session:
-        m = request.session['my']
-        return render(request, 'ui.html', {'p': m})
+    if 'mye' in request.session:
+        mail = request.session['mye']
+    if 'myu' in request.session:
+        uname = request.session['myu']
+    
+        return render(request, 'ui.html', {'E': mail,'U':uname})
     return redirect('login')
 
 # ---------------------- Ask AI from OpenRouter ----------------------
@@ -105,10 +117,21 @@ def chatbot_view(request):
                 bot_reply = "I'm powered by custom AI created and managed by Vazeem 💡"
             elif any(x in user_message for x in ["who is your creator", "who created you", "about your creator", "your developer", "who made you","your developer","how were you built","who programmed you", "who designed you","your programmer","who coded you","who is your programmer","who are your programmr","who build you","who is build you","who is builded you"]):
                 bot_reply = "I was created and fine-tuned by my developer Vazeem k👨‍💻, Sir using custom AI tools 💡"
+            if any(x in user_message for x in [
+                    "can you detect the system’s theme and change automatically",
+                    "can you detect the device theme and change automatically",
+                    "can you detect the mobile theme and change automatically",
+                    "can you detect the mobile theme"
+                ]):
+                 bot_reply = "Yes, I can"
+
 
             elif "who are you" in user_message:
                 bot_reply = "I'm Vazeem's smart assistant 🤖, ready to help you with anything you need!"
-
+            elif "do you have dark mode" in user_message or "dark mode available" in user_message or "enable dark mode" in user_message:
+                bot_reply = "Yes, I support Dark Mode 🌙. You can click the 'Dark Mode' button on the top left to switch."
+            elif "Can you detect the system’s theme and change automatically" in user_message or "Can you detect the device theme and change automatically?" in user_message or "Can you detect the mobile theme and change automatically" in user_message or "Can you detect the device theme and change automatically?" in user_message or "Can you detect the mobile theme" in user_message:
+                bot_reply = "Yes, I can"
 
             else:
                 # ✅ AI fallback

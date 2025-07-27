@@ -4,133 +4,301 @@
   <meta charset="UTF-8">
   <title>My Assistant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap 5 CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #74ebd5, #9face6);
-      font-family: 'Segoe UI', sans-serif;
-      min-height: 100vh;
+</svg>
+
+  <!-- <style>
+    html, body {
+      height: 100%;
       margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     .chat-container {
-      width: 100%;
-      max-width: 800px;
-      height: 90vh;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+    }
+    .btn-sm{
+      color: rgb(228, 75, 75);
     }
 
     .chat-header {
-      background-color: #6c5ce7;
+      background-color: #020108;
       color: white;
-      text-align: center;
-      padding: 15px;
+      padding: 1rem;
       font-size: 1.2rem;
-      position: relative;
+      font-weight: 500;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
     }
 
-    .chat-header button {
-      margin-top: 10px;
-    }
-
     .chat-body {
       flex: 1;
-      padding: 20px;
       overflow-y: auto;
+      padding: 1rem;
     }
 
     .chat-msg {
-      margin-bottom: 15px;
-      max-width: 75%;
-      padding: 10px 15px;
-      border-radius: 15px;
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 1.25rem;
+      max-width: 85%;
       word-wrap: break-word;
     }
 
     .user-msg {
-      background-color: #dff9fb;
+      background-color: #dfe6e9;
       align-self: flex-end;
       text-align: right;
+      margin-left: auto;
     }
 
     .bot-msg {
-      background-color: #f1f2f6;
+      background-color: #ecf0f1;
       align-self: flex-start;
       text-align: left;
+      margin-right: auto;
     }
 
     .chat-input {
-      padding: 15px;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid #ccc;
+      padding: 0.75rem;
       display: flex;
-      gap: 10px;
-      background-color: #f8f9fa;
+      gap: 0.5rem;
     }
 
     .chat-input input {
       flex: 1;
       border-radius: 25px;
       border: 1px solid #ccc;
-      padding: 10px 20px;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      outline: none;
     }
 
     .chat-input button {
       border-radius: 25px;
-      padding: 10px 25px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
     }
 
-    @media (max-width: 768px) {
-      .chat-container {
-        height: 95vh;
-      }
-
+    @media (max-width: 576px) {
       .chat-header {
+        font-size: 1rem;
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.5rem;
       }
 
-      .chat-header button {
-        align-self: flex-end;
-        margin-top: 28px;
+      .chat-body {
+        font-size: 0.95rem;
+        padding: 0.75rem;
+      }
+
+      .chat-input input {
+        font-size: 0.95rem;
       }
 
       .chat-input button {
-        padding: 10px 15px;
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
       }
+
+     
+/* darkmode */
+
+    
+
     }
-  </style>
+  </style> -->
+
+  <style>
+  :root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --header-bg: #020108;
+    --user-msg-bg: #dfe6e9;
+    --bot-msg-bg: #ecf0f1;
+    --input-bg: #ffffff;
+    --input-border: #ccc;
+    --button-color: #000;
+  }
+
+  .dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --header-bg: #1e1e1e;
+    --user-msg-bg: #2e2e2e;
+    --bot-msg-bg: #3a3a3a;
+    --input-bg: #1c1c1c;
+    --input-border: #555;
+    --button-color: #ffffff;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    height: 100%;
+  }
+
+  .chat-header {
+    background-color: var(--header-bg);
+    color: var(--text-color);
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: var(--bg-color);
+  }
+
+  .chat-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-msg {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 1.25rem;
+    max-width: 85%;
+    word-wrap: break-word;
+  }
+
+  .user-msg {
+    background-color: var(--user-msg-bg);
+    align-self: flex-end;
+    text-align: right;
+    margin-left: auto;
+    color: var(--text-color);
+  }
+
+  /* .bot-msg {
+    background-color: var(--bot-msg-bg);
+    align-self: flex-start;
+    text-align: left;
+    margin-right: auto;
+    color: var(--text-color);
+  } */
+
+  .bot-msg {
+  background: none !important;  /* Remove background */
+  border: none !important;      /* Remove any border */
+  box-shadow: none !important;  /* Remove shadows if any */
+  padding: 0 !important;        /* Minimal spacing */
+  margin: 0.75rem 0;
+  color: var(--text-color);     /* Dynamic text color (dark/light) */
+  font-size: 1rem;
+  align-self: flex-start;
+  text-align: left;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+
+
+  .chat-input {
+    border-top: 1px solid var(--input-border);
+    padding: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    background-color: var(--bg-color);
+  }
+
+  .chat-input input {
+    flex: 1;
+    border-radius: 25px;
+    border: 1px solid var(--input-border);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    outline: none;
+  }
+
+  .chat-input button {
+    border-radius: 25px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    color: var(--button-color);
+    background: none;
+    border: none;
+  }
+
+  .bi-arrow-up-circle-fill {
+    font-size: 33px;
+    color: var(--button-color);
+  }
+
+  .btn-sm {
+    color: rgb(228, 75, 75);
+  }
+
+  @media (max-width: 576px) {
+    .chat-header {
+      font-size: 1rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .chat-body {
+      font-size: 0.95rem;
+      padding: 0.75rem;
+    }
+
+    .chat-input input {
+      font-size: 0.95rem;
+    }
+
+    .chat-input button {
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+    }
+
+ 
+
+  }
+</style>
+
 </head>
 <body>
 
+<p style="font-size: 0.9rem; color: grey; padding: 0.75rem; font-family: 'Arial Narrow', Arial, sans-serif;"><b>Logged in as </b><strong><b>{{E}}</b></strong></p>
+<div class="chat-header d-flex justify-content-between align-items-center px-3">
+
+</div>
+
+
 <div class="chat-container">
-  <div class="chat-header">
-    Hello Sir, How Can I Assist You Today
-    <button onclick="clearChat()" class="btn btn-danger btn-sm">Clear Chat</button>
+  <div class="chat-header w-100">
+    <button onclick="toggleDarkMode()" class="btn btn-sm btn-outline-secondary text-light"><i class="bi bi-circle-half"> change theme</i></button>
+    <span style="color: white;"> {% if U %} Hello {{U}}, How Can I Assist You Today?</span> {% endif %}
+    <button onclick="clearChat()" class="btn btn-sm">Clear Chat</button>
   </div>
 
-  <div class="chat-body" id="chatBody">
-    <!-- Messages will be dynamically inserted here -->
-  </div>
+  <div class="chat-body" id="chatBody"></div>
 
   <div class="chat-input">
     <input type="text" id="userInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()">
-    <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+    <button class="btn" onclick="sendMessage()"><i style="font-size: 33px;" class="bi bi-arrow-up-circle-fill"></i></button>
   </div>
 </div>
 
@@ -143,23 +311,19 @@
     appendMessage(message, 'user');
     input.value = "";
 
-    // Disable the Send button
     const sendBtn = document.querySelector('.chat-input button');
     sendBtn.disabled = true;
 
-    // Show temporary "Typing..." message
     appendMessage("Typing...", 'bot');
 
     try {
-      const response = await fetch("/chatbot/", {  // ✅ Updated endpoint
+      const response = await fetch("/chatbot/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: message })
+        body: JSON.stringify({ message })
       });
 
       const data = await response.json();
-
-      // Remove "Typing..." message
       const chatBody = document.getElementById("chatBody");
       const tempTyping = chatBody.querySelector(".bot-msg:last-child");
       if (tempTyping && tempTyping.textContent === "Typing...") {
@@ -167,9 +331,8 @@
       }
 
       appendMessage(data.reply, 'bot');
-
-    } catch (error) {
-      appendMessage("Sorry, something went wrong. Please try again.", 'bot');
+    } catch {
+      appendMessage("Sorry, something went wrong.", 'bot');
     } finally {
       sendBtn.disabled = false;
     }
@@ -178,7 +341,7 @@
   function appendMessage(text, type) {
     const chatBody = document.getElementById("chatBody");
     const msg = document.createElement("div");
-    msg.className = "chat-msg " + (type === 'user' ? 'user-msg' : 'bot-msg');
+    msg.className = `chat-msg ${type === 'user' ? 'user-msg' : 'bot-msg'}`;
     msg.textContent = text;
     chatBody.appendChild(msg);
     chatBody.scrollTop = chatBody.scrollHeight;
@@ -188,9 +351,62 @@
     document.getElementById("chatBody").innerHTML = "";
   }
 
-  // Focus input on page load
   window.onload = () => document.getElementById("userInput").focus();
 </script>
+
+
+<!-- mod -->
+<script>
+  const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (isDarkMode) {
+    document.documentElement.classList.add('dark-mode');
+  }
+
+  // Optional: Listen for changes dynamically
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (e.matches) {
+      document.documentElement.classList.add('dark-mode');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+    }
+  });
+</script>
+
+<script>
+  // Set dark mode if user prefers
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark-mode');
+  }
+
+  // Listen to system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (e.matches) {
+      document.documentElement.classList.add('dark-mode');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+    }
+  });
+
+  // Toggle manually
+  function toggleDarkMode() {
+    document.documentElement.classList.toggle("dark-mode");
+    const mode = document.documentElement.classList.contains("dark-mode") ? "dark" : "light";
+    localStorage.setItem("mode", mode);
+  }
+
+  // Load saved mode
+  window.onload = () => {
+    const savedMode = localStorage.getItem("mode");
+    if (savedMode === "dark") {
+      document.documentElement.classList.add("dark-mode");
+    }
+    document.getElementById("userInput").focus();
+  };
+</script>
+
+
+
+
 
 </body>
 </html>
