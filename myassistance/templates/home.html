@@ -36,30 +36,41 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    .hero h2 {
-      font-size: 2rem;
-      color: #333;
-      line-height: 2.8rem;
-      /* animation: blink 2.5s infinite; */
-    }
+
     .animated-words {
       display: inline-block;
-      /* #4a90e2 */
       color: #4d6f7f; 
-      /* transition: background 7s; */
       font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
       vertical-align: bottom;
     }
+
+    .hero h2 {
+      font-size: 2rem;
+      color: #333;
+      line-height: 2.8rem;
+      white-space: nowrap;
+      overflow-wrap: normal;
+      display: inline-block;
+    }
+
     .hero p {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #666;
       margin-top: 1rem;
+      white-space: nowrap;
+      overflow-wrap: normal;
+      display: inline-block;
+      position: relative;
+      bottom: 15px;
+      left: 75px;
     }
+
     .btn {
       position: relative;
-      top: 30px;
+      top: 50px;
+      right: 265px;
       padding: 1rem 2rem;
       font-size: 1rem;
       background-color: #007bff;
@@ -93,32 +104,49 @@
       from { transform: translateY(100%); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
 
     /* Responsive */
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       header h1 {
         font-size: 2rem;
       }
       .hero h2 {
         font-size: 1.5rem;
         line-height: 2rem;
+        white-space: normal;
       }
       .hero p {
         font-size: 1rem;
+        white-space: normal;
+        position: static;
+        display: block;
+        margin-top: 1rem;
       }
       .btn {
+        position: static;
+        margin-top: 2rem;
         padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
       }
+      .f{
+        position: relative;
+        right: 16px;
+      }
+      
+    }
+
+    @media (max-width: 480px) {
+      .hero h2 {
+        font-size: 1.3rem;
+      }
+      .hero p {
+        font-size: 0.95rem;
+      }
+      .btn {
+        font-size: 0.9rem;
+        padding: 0.7rem 1.2rem;
+      }
+      
     }
   </style>
 </head>
@@ -129,14 +157,14 @@
 
   <main>
     <section class="hero">
-      <h2>Welcome to Your Personal <span class="animated-words" id="wordChanger"></span></h2>
+      <h2>Welcome to your personal assistant <span class="animated-words" id="wordChanger"></span></h2>
       <p>Chat with your intelligent assistant, get instant answers and more.</p>
       <a href="/login/" class="btn">Get Started</a>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Mini Chat AI Assistant. All rights reserved.</p>
+    <p class="f">&copy; 2025 Mini Chat AI Assistant. All rights reserved.</p>
   </footer>
 
   <script>
@@ -149,9 +177,9 @@
       if (charIndex < words[wordIndex].length) {
         el.textContent += words[wordIndex].charAt(charIndex);
         charIndex++;
-        setTimeout(typeEffect, 30);
+        setTimeout(typeEffect, 70);
       } else {
-        setTimeout(eraseEffect, 1300);
+        setTimeout(eraseEffect, 1500);
       }
     }
 
@@ -159,7 +187,7 @@
       if (charIndex > 0) {
         el.textContent = words[wordIndex].substring(0, charIndex - 1);
         charIndex--;
-        setTimeout(eraseEffect, 80);
+        setTimeout(eraseEffect, 25);
       } else {
         wordIndex = (wordIndex + 1) % words.length;
         setTimeout(typeEffect, 400);
