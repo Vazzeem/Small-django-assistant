@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Chat Assistant - Your smart assistant for instant answers and help" />
+  <title>AI Chat Assistant</title>
+  <link rel="icon" href="{% static 'images/cyborg.png' %}" type="image/png" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f7f7f7;
+    }
+    header {
+      background-color: #1f1f1f;
+      color: white;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      animation: slideDown 1s ease-out;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    main {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .hero {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero h2 {
+      font-size: 2rem;
+      color: #333;
+      line-height: 2.8rem;
+      /* animation: blink 2.5s infinite; */
+    }
+    .animated-words {
+      display: inline-block;
+      /* #4a90e2 */
+      color: #4d6f7f; 
+      /* transition: background 7s; */
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: bottom;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    .btn {
+      position: relative;
+      top: 30px;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    footer {
+      background-color: #1f1f1f;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      animation: slideUp 1s ease-out;
+    }
+
+    /* Animation Keyframes */
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      .hero h2 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AI Chat Assistant</h1>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Welcome to Your Personal <span class="animated-words" id="wordChanger"></span></h2>
+      <p>Chat with your intelligent assistant, get instant answers and more.</p>
+      <a href="/login/" class="btn">Get Started</a>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Mini Chat AI Assistant. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const words = ["AI Assistant", "Chat Intelligent", "Smart Helper", "Study Buddy"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    const el = document.getElementById("wordChanger");
+
+    function typeEffect() {
+      if (charIndex < words[wordIndex].length) {
+        el.textContent += words[wordIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeEffect, 30);
+      } else {
+        setTimeout(eraseEffect, 1300);
+      }
+    }
+
+    function eraseEffect() {
+      if (charIndex > 0) {
+        el.textContent = words[wordIndex].substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(eraseEffect, 80);
+      } else {
+        wordIndex = (wordIndex + 1) % words.length;
+        setTimeout(typeEffect, 400);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(typeEffect, 700);
+    });
+  </script>
+</body>
+</html>

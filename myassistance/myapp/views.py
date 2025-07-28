@@ -20,7 +20,7 @@ client = OpenAI(
 )
 
 # ---------------------- Register ----------------------
-def r(request):
+def signup(request):
     if request.method == 'POST':
         name = request.POST.get('username')
         email = request.POST.get('email')
@@ -35,7 +35,7 @@ def r(request):
             aimodel.objects.create(Username=name, password=passw, email=email)
             messages.success(request, "Success")
             return redirect('login')
-    return render(request, 'r.html')
+    return render(request, 'signup.html')
 
 # ---------------------- Login ----------------------
 def login(request):
@@ -50,7 +50,23 @@ def login(request):
             return redirect('ui')
         else:
             messages.error(request, "Login failed")
-    return render(request, 'login.html')
+    return render(request,'login.html')
+
+
+# ----------------------privacy ----------------------
+
+from django.shortcuts import render
+
+def privacy_policy(request):
+    return render(request, 'privacy.html')
+
+
+
+
+# ---------------------- Home ----------------------
+
+def home(request):
+    return render(request, 'home.html')
 
 # ---------------------- UI ----------------------
 def ui(request):
@@ -82,6 +98,73 @@ def ask_openrouter_ai(message):
 
 
 # ---------------------- Chatbot View (Rule + AI) ----------------------
+# @csrf_exempt
+# def chatbot_view(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             user_message = data.get('message', '').lower().strip()
+
+#             if not user_message:
+#                 return JsonResponse({'reply': "Please send a valid message."})
+
+#             # ✅ Rule-based replies
+#             if "who is your creator" in user_message or "who created you" in user_message:
+#                 bot_reply = "I was created by my sir and developer Vazeem K👨‍💻"
+#             elif "what is your name" in user_message:
+#                 bot_reply = "My name is AI Assistander 🤖"
+#             elif "how old are you" in user_message or "your age?" in user_message or "age" in user_message:
+#                 bot_reply = "I was born on July 6, 2025 😄"
+#             elif "do you know malayalam" in user_message:
+#                 bot_reply = "Yes, I can understand simple Malayalam 😊"
+
+
+#             elif any(x in user_message for x in ["what is the date", "date now", "today's date", "current date", "date", "date?"]):
+#                 bot_reply = f"Today's date is {datetime.date.today().strftime('%B %d, %Y')} 📅"
+
+#             elif any(x in user_message for x in ["what is the time", "time now", "time", "time?", "what is the time now", "current time", "time please"]):
+#                 now = timezone.localtime().strftime("%I:%M %p")
+#                 bot_reply = f"The current time is {now} ⏰"
+
+
+
+#             elif any(x in user_message for x in ["what do you know about your creator", "what you know about your creator", "tell me about your creator"]):
+#                 bot_reply = "I was created by my intelligent developer Vazeem 👨‍💻. He trained me to be helpful and friendly!"
+
+#             elif "do you have brain" in user_message or "do you have a brain" in user_message or "you have a brain" in user_message or "you have brain" in user_message:
+#                 bot_reply = "yes, I am an artificial intelligence and don't have physical organs or biological functions like a human. I am a program running on capable of processing information and generating responses based on that information, but I do not have consciousness, emotions, or biological needs like a human does. but I run on powerful AI models 🧠"
+#             elif "mistral" in user_message or "mistral ai" in user_message:
+#                 bot_reply = "I'm powered by custom AI created and managed by Vazeem 💡"
+#             elif any(x in user_message for x in ["who is your creator", "who created you", "about your creator", "your developer", "who made you","your developer","how were you built","who programmed you", "who designed you","your programmer","who coded you","who is your programmer","who are your programmr","who build you","who is build you","who is builded you"]):
+#                 bot_reply = "I was created and fine-tuned by my developer Vazeem k👨‍💻, Sir using custom AI tools 💡"
+#             if any(x in user_message for x in [
+#                     "can you detect the system’s theme and change automatically",
+#                     "can you detect the device theme and change automatically",
+#                     "can you detect the mobile theme and change automatically",
+#                     "can you detect the mobile theme"
+#                 ]):
+#                  bot_reply = "Yes, I can"
+
+
+#             elif "who are you" in user_message:
+#                 bot_reply = "I'm Vazeem's smart assistant 🤖, ready to help you with anything you need!"
+#             elif "do you have dark mode" in user_message or "dark mode available" in user_message or "enable dark mode" in user_message:
+#                 bot_reply = "Yes, I support Dark Mode 🌙. You can click the 'Dark Mode' button on the top left to switch."
+#             elif "Can you detect the system’s theme and change automatically" in user_message or "Can you detect the device theme and change automatically?" in user_message or "Can you detect the mobile theme and change automatically" in user_message or "Can you detect the device theme and change automatically?" in user_message or "Can you detect the mobile theme" in user_message:
+#                 bot_reply = "Yes, I can"
+
+#             else:
+#                 # ✅ AI fallback
+#                 bot_reply = ask_openrouter_ai(user_message)
+
+#             return JsonResponse({'reply': bot_reply})
+
+#         except json.JSONDecodeError:
+#             return JsonResponse({'reply': "Invalid JSON format."}, status=400)
+
+#     return JsonResponse({'reply': "Method not allowed."}, status=405)
+
+
 @csrf_exempt
 def chatbot_view(request):
     if request.method == 'POST':
@@ -92,49 +175,56 @@ def chatbot_view(request):
             if not user_message:
                 return JsonResponse({'reply': "Please send a valid message."})
 
-            # ✅ Rule-based replies
-            if "who is your creator" in user_message or "who created you" in user_message:
-                bot_reply = "I was created by my sir and developer Vazeem K👨‍💻"
+            # Rule-based replies
+            if any(phrase in user_message for phrase in [
+                "who is your creator", "who created you", "about your creator", "your developer",
+                "who made you", "how were you built", "who programmed you", "who designed you",
+                "your programmer", "who coded you", "who is your programmer", "who build you",
+                "who is build you", "who is builded you"
+            ]):
+                bot_reply = "I was created and fine-tuned by my developer Vazeem K 👨‍💻 using custom AI technologies 💡"
+
             elif "what is your name" in user_message:
                 bot_reply = "My name is AI Assistander 🤖"
-            elif "how old are you" in user_message or "your age?" in user_message or "age" in user_message:
+
+            elif any(phrase in user_message for phrase in ["how old are you", "your age?", "age"]):
                 bot_reply = "I was born on July 6, 2025 😄"
+
             elif "do you know malayalam" in user_message:
                 bot_reply = "Yes, I can understand simple Malayalam 😊"
-            elif "what is the date" in user_message:
-                bot_reply = f"Today's date is {datetime.date.today()} 📅"
-            elif "what is the time" in user_message or "time now" in user_message or "time" in user_message or "time?" in user_message or "what is the time now?" in user_message or "what is the time now" in user_message:
+
+            elif any(phrase in user_message for phrase in ["what is the date", "date now", "today's date", "current date", "date", "date?"]):
+                bot_reply = f"Today's date is {datetime.date.today().strftime('%B %d, %Y')} 📅"
+
+            elif any(phrase in user_message for phrase in ["what is the time", "time now", "time", "time?","what is the time now", "current time", "time please"]):
                 now = timezone.localtime().strftime("%I:%M %p")
                 bot_reply = f"The current time is {now} ⏰"
-            elif any(x in user_message for x in ["what is the date", "date now", "today's date", "current date","date","date?"]):
-                bot_reply = f"Today's date is {datetime.date.today()} 📅"
-            elif any(x in user_message for x in ["what do you know about your creator", "what you know about your creator", "tell me about your creator"]):
+
+            elif any(phrase in user_message for phrase in ["what do you know about your creator", "tell me about your creator"]):
                 bot_reply = "I was created by my intelligent developer Vazeem 👨‍💻. He trained me to be helpful and friendly!"
 
-            elif "do you have brain" in user_message or "do you have a brain" in user_message or "you have a brain" in user_message or "you have brain" in user_message:
-                bot_reply = "yes, I am an artificial intelligence and don't have physical organs or biological functions like a human. I am a program running on capable of processing information and generating responses based on that information, but I do not have consciousness, emotions, or biological needs like a human does. but I run on powerful AI models 🧠"
+            elif any(phrase in user_message for phrase in ["do you have brain", "do you have a brain", "you have a brain", "you have brain"]):
+                bot_reply = "Yes, my brain is made of logical code and artificial intelligence algorithms 🧠."
+
             elif "mistral" in user_message or "mistral ai" in user_message:
                 bot_reply = "I'm powered by custom AI created and managed by Vazeem 💡"
-            elif any(x in user_message for x in ["who is your creator", "who created you", "about your creator", "your developer", "who made you","your developer","how were you built","who programmed you", "who designed you","your programmer","who coded you","who is your programmer","who are your programmr","who build you","who is build you","who is builded you"]):
-                bot_reply = "I was created and fine-tuned by my developer Vazeem k👨‍💻, Sir using custom AI tools 💡"
-            if any(x in user_message for x in [
-                    "can you detect the system’s theme and change automatically",
-                    "can you detect the device theme and change automatically",
-                    "can you detect the mobile theme and change automatically",
-                    "can you detect the mobile theme"
-                ]):
-                 bot_reply = "Yes, I can"
-
 
             elif "who are you" in user_message:
                 bot_reply = "I'm Vazeem's smart assistant 🤖, ready to help you with anything you need!"
-            elif "do you have dark mode" in user_message or "dark mode available" in user_message or "enable dark mode" in user_message:
+
+            elif any(phrase in user_message for phrase in ["dark mode", "do you have dark mode", "dark mode available", "enable dark mode"]):
                 bot_reply = "Yes, I support Dark Mode 🌙. You can click the 'Dark Mode' button on the top left to switch."
-            elif "Can you detect the system’s theme and change automatically" in user_message or "Can you detect the device theme and change automatically?" in user_message or "Can you detect the mobile theme and change automatically" in user_message or "Can you detect the device theme and change automatically?" in user_message or "Can you detect the mobile theme" in user_message:
-                bot_reply = "Yes, I can"
+
+            elif any(phrase in user_message for phrase in [
+                "can you detect the system’s theme and change automatically",
+                "can you detect the device theme and change automatically",
+                "can you detect the mobile theme and change automatically",
+                "can you detect the mobile theme"
+            ]):
+                bot_reply = "Yes, I can 🌗. I can auto-detect theme preferences and switch between light and dark."
 
             else:
-                # ✅ AI fallback
+                # AI fallback response
                 bot_reply = ask_openrouter_ai(user_message)
 
             return JsonResponse({'reply': bot_reply})

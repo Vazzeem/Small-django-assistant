@@ -19,12 +19,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myapp import views
+from django.views.generic import TemplateView
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.login, name='login'),
-    path('ui/', views.ui, name='ui'),
-    path('r/', views.r, name='r'),
-    path('chatbot/', views.chatbot_view, name='chatbot'),
     
+    path('admin/', admin.site.urls),
+    path('login/', views.login, name='login'),
+    path('', views.home, name='home'),
+    path('ui/', views.ui, name='ui'),
+    path('signup/', views.signup, name='signup'),
+    path('chatbot/', views.chatbot_view, name='chatbot'),
+    path('privacy/', views.privacy_policy, name='privacy'),
+     path("google7cc9fe86a6d7e7a8.html", TemplateView.as_view(template_name="google7cc9fe86a6d7e7a8.html")),
 ]
+
+# urlpatterns += templates_urlpatterns = []()
+    
+
+urlpatterns += staticfiles_urlpatterns()
